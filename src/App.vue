@@ -1,62 +1,76 @@
-<script setup>
-  import {reactive} from 'vue';
-
-  const estado = reactive({
-    num1: 0,
-    num2: 0,
-    operator: 'soma',
-    result: 0
-  })
-
-  function soma() {
-    estado.result = estado.num1 + estado.num2;
-    return estado.result;
-  }
-
-  const retorna = () => {
-    const { operator } = estado;
-
-    switch(operator){
-      case 'soma':
-        return soma();
+<script>
+export default {
+  data() {
+    return {
+      num1: 0,
+      num2: 0,
+      operator: 'adicao',
+      result: 0
+    };
+  },
+  methods: {
+    calculate() {
+      switch (this.operator) {
+        case 'adicao':
+          this.result = parseFloat(this.num1) + parseFloat(this.num2);
+          break;
+        case 'subtracao':
+          this.result = parseFloat(this.num1) - parseFloat(this.num2);
+          break;
+        case 'multiplicacao':
+          this.result = parseFloat(this.num1) * parseFloat(this.num2);
+          break;
+        case 'divisao':
+          this.result = parseFloat(this.num1) / parseFloat(this.num2);
+          break;
+        default:
+          this.result = 0;
+      }
     }
   }
-
+};
 </script>
 
 <template>
-<div class="container">
-  <header class="p-5 mb-4 mt-4 bg-dark rounded-3">
-    <h1>Calculadora</h1>
+<div class="container" id="app">
+  <header class="p-5 mb-4 mt-4 bg-dark rounded-4" >
+    <h1>Calculadora Aritmética</h1>
   </header>
-  <form>
-  <div class="row">
-    <div class="col">
-      <input @change="evento => estado.num1 = evento.target.value" type="number" placeholder="Digite um número" class="form-control">
-    </div>
-    <div class="col">
-      <input @change="evento => estado.num2 = evento.target.value" type="number" placeholder="Digite um número" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <select @change="evento => estado.operator = evento.target.value" class="form-control">
-        <option value="soma">Somar</option>
-        <option value="subtração">Subtrair</option>
-        <option value="divisão">Dividir</option>
-        <option value="multiplicação">Multiplicar</option>
+    
+    <div>
+      <input type="number" v-model.number="num1" @input="calculate">
+      <select v-model="operator" @change="calculate">
+        <option value="adicao">+</option>
+        <option value="subtracao">-</option>
+        <option value="multiplicacao">*</option>
+        <option value="divisao">/</option>
       </select>
+      <input type="number" v-model.number="num2" @input="calculate">
+      <span>= {{ result }}</span>
     </div>
-  </div>
-</form>
-
-<ul class="list-group mt-4 col-md-2">
-  <li class="list-group-item">
-    <label>Resultado {{ estado.result }}</label>
-  </li>
-</ul>
 </div>
 </template>
 
 <style scoped>
+#app {
+  text-align: center;
+  margin-top: 50px;
+}
+
+input[type="number"] {
+  width: 150px;
+  padding: 5px;
+  margin: 5px;
+}
+
+select {
+  padding: 5px;
+  margin:  5px;
+}
+
+span {
+  font-weight: bold;
+}
 h1 {
   color: #fff;
 }
